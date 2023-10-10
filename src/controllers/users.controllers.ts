@@ -30,6 +30,7 @@ export const createUser = async (req:Request, res:Response) => {
 export const uploadRequest = async (req: Request, res: Response) => {
     const image = req.files?.image
     let imageUploaded = null
+    console.log(image)
 
     if (image) {
         if ("tempFilePath" in image) {
@@ -37,7 +38,7 @@ export const uploadRequest = async (req: Request, res: Response) => {
             await fs.unlink(image.tempFilePath)
         }
     }
-
+    console.log(imageUploaded)
 
     res.send({message: "Upload Request Success", data: imageUploaded})
 }
