@@ -1,5 +1,7 @@
 import {Request, Response} from "express";
 import prismaClient from "../db/db";
+import fs from "fs-extra";
+import {uploadImage} from "../utils/cloudinary";
 
 export const getAllUsers = async (req:Request, res:Response) => {
     try {
@@ -23,4 +25,19 @@ export const createUser = async (req:Request, res:Response) => {
     }catch (e) {
         res.status(500).json(e)
     }
+}
+
+export const uploadRequest = async (req: Request, res: Response) => {
+    const image = req.files?.image
+    let imageUploaded = null
+
+    if (image) {
+        if ("tempFilePath" in image) {
+            imageUploaded = await uploadImage(image.tempFilePath)
+            await fs.unlink(image.tempFilePath)
+        }
+    }
+
+
+    res.send({message: "Upload Request Success", data: imageUploaded})
 }
